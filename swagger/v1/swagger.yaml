@@ -1,0 +1,82 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/invoices":
+    post:
+      summary: Creates a invoice
+      tags:
+      - Invoices
+      parameters: []
+      responses:
+        '201':
+          description: invoice created
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  format: float
+                subscription_id:
+                  type: integer
+              required:
+              - amount
+              - subscription_id
+  "/invoices/{id}":
+    get:
+      summary: Retrieves a invoice
+      tags:
+      - Invoices
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: invoice found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  invoice:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      amount:
+                        type: number
+                        format: float
+                      subscription_id:
+                        type: integer
+                      status:
+                        type: string
+                      charge_amount:
+                        type: number
+                        format: float
+                      last_decline_code:
+                        type: string
+                        nullable: true
+                    required:
+                    - id
+                    - amount
+                    - subscription_id
+                    - status
+                    - charge_amount
+                    - last_decline_code
+        '404':
+          description: invoice not found
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000

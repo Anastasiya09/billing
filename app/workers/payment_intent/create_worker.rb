@@ -5,6 +5,8 @@ class PaymentIntent::CreateWorker
     { range: 8..11, percent: 50 },
     { range: 11..15, percent: 25 }
   ]
+  FAILURE_RETRY_DELAY = 10.seconds
+  SUCCESS_REBILLING_DELAY = 1.week
 
   include Sidekiq::Worker
   sidekiq_options retry: false
@@ -37,10 +39,10 @@ class PaymentIntent::CreateWorker
 
     if payment_intent.success?
       # automatically schedule an additional transaction one week later for the remaining balance.
-      PaymentIntent::CreateWorker.perform_in(1.week, invoice.id, invoice.amount - payment_intent.amount)
+      PaymentIntent::CreateWorker.perform_in(SUCCESS_REBILLING_DELAY, invoice.id, invoice.amount - payment_intent.amount)
     else
       next_amount_charge = invoice.amount * percent / 100
-      PaymentIntent::CreateWorker.perform_in(10.second, invoice.id, next_amount_charge) if next_amount_charge.positive?
+      PaymentIntent::CreateWorker.perform_in(FAILURE_RETRY_DELAY, invoice.id, next_amount_charge) if next_amount_charge.positive?
     end
   end
 
