@@ -1,15 +1,20 @@
 class Invoice < ActiveRecord::Base
+  PENDING = 'pending'
+  PAID = 'paid'
+  PARTIALLY_PAID = 'partially_paid'
+  FAILURE = 'failure'
+
   has_many :payment_intents
 
   validates :amount, :subscription_id, presence: true
 
   def status
-    return 'pending' if payment_intents.empty?
+    return PENDING if payment_intents.empty?
 
-    return 'paid' if charge_amount == amount
-    return 'partially_paid' if charge_amount < amount && charge_amount.positive?
+    return PAID if charge_amount == amount
+    return PARTIALLY_PAID if charge_amount < amount && charge_amount.positive?
 
-    'failure'
+    FAILURE
   end
 
   def last_decline_code
