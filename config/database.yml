@@ -13,8 +13,9 @@
 # gem "pg"
 #
 default: &default
-  adapter: postgresql
+  adapter: sqlite3
   encoding: unicode
+  timeout: 5000
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
@@ -22,7 +23,7 @@ default: &default
 
 development:
   <<: *default
-  database: billing_development
+  database: db/development.sqlite3
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -56,7 +57,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: billing_test
+  database: db/test.sqlite3
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -81,18 +82,18 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: billing_production
+    database: db/production.sqlite3
     username: billing
     password: <%= ENV["BILLING_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
-    database: billing_production_cache
+    database: db/production_cache.sqlite3
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: billing_production_queue
+    database: db/production_queue.sqlite3
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: billing_production_cable
+    database: db/production_cable.sqlite3
     migrations_paths: db/cable_migrate
