@@ -11,23 +11,23 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.0].define(version: 2024_12_14_125945) do
-  create_table "invoices", force: :cascade do |t|
-    t.float "amount"
-    t.integer "subscription_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "payment_intents", force: :cascade do |t|
-    t.integer "invoice_id", null: false
+  create_table "charges", force: :cascade do |t|
+    t.integer "payment_intent_id", null: false
     t.float "amount", null: false
     t.integer "status", null: false
     t.string "decline_code"
     t.string "error_message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["invoice_id"], name: "index_payment_intents_on_invoice_id"
+    t.index ["payment_intent_id"], name: "index_charges_on_payment_intent_id"
   end
 
-  add_foreign_key "payment_intents", "invoices"
+  create_table "payment_intents", force: :cascade do |t|
+    t.float "amount"
+    t.integer "subscription_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "charges", "payment_intents"
 end

@@ -1,11 +1,11 @@
 require 'swagger_helper'
 
-describe 'Invoces API' do
-  def self.invoice_object
+describe 'PaymentIntent API' do
+  def self.payment_intent_object
     {
       type: :object,
       properties: {
-        invoice: {
+        payment_intent: {
           type: :object,
           properties: {
             id: { type: :integer },
@@ -21,11 +21,11 @@ describe 'Invoces API' do
     }
   end
 
-  path '/invoices' do
-    post 'Creates a invoice' do
-      tags 'Invoices'
+  path '/payment_intents' do
+    post 'Creates a payment intent' do
+      tags 'PaymentIntents'
       consumes 'application/json'
-      parameter name: :invoice, in: :body, schema: {
+      parameter name: :payment_intent, in: :body, schema: {
         type: :object,
         properties: {
           amount: { type: :number, format: :float },
@@ -34,35 +34,35 @@ describe 'Invoces API' do
         required: [ 'amount', 'subscription_id' ]
       }
 
-      response '201', 'invoice created' do
-        schema invoice_object
+      response '201', 'payment_intent created' do
+        schema payment_intent_object
 
-        let(:invoice) { { amount: 100, subscription_id: 1 } }
+        let(:payment_intent) { { amount: 100, subscription_id: 1 } }
         run_test!
       end
 
       response '422', 'invalid request' do
-        let(:invoice) { { amount: 100 } }
+        let(:payment_intent) { { amount: 100 } }
         run_test!
       end
     end
   end
 
-  path '/invoices/{id}' do
-    get 'Retrieves a invoice' do
-      tags 'Invoices'
+  path '/payment_intents/{id}' do
+    get 'Retrieves a payment_intent' do
+      tags 'PaymentIntents'
       produces 'application/json'
       parameter name: :id, in: :path, type: :integer
 
-      response '200', 'invoice found' do
-        schema invoice_object
+      response '200', 'payment_intent found' do
+        schema payment_intent_object
 
-        let(:invoice) { create(:invoice) }
-        let(:id) { invoice.id }
+        let(:payment_intent) { create(:payment_intent) }
+        let(:id) { payment_intent.id }
         run_test!
       end
 
-      response '404', 'invoice not found' do
+      response '404', 'payment_intent not found' do
         let(:id) { 'invalid' }
         run_test!
       end

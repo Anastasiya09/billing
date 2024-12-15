@@ -4,15 +4,15 @@ info:
   title: API V1
   version: v1
 paths:
-  "/invoices":
+  "/payment_intents":
     post:
-      summary: Creates a invoice
+      summary: Creates a payment intent
       tags:
-      - Invoices
+      - PaymentIntents
       parameters: []
       responses:
         '201':
-          description: invoice created
+          description: payment_intent created
         '422':
           description: invalid request
       requestBody:
@@ -29,11 +29,11 @@ paths:
               required:
               - amount
               - subscription_id
-  "/invoices/{id}":
+  "/payment_intents/{id}":
     get:
-      summary: Retrieves a invoice
+      summary: Retrieves a payment_intent
       tags:
-      - Invoices
+      - PaymentIntents
       parameters:
       - name: id
         in: path
@@ -42,13 +42,13 @@ paths:
           type: integer
       responses:
         '200':
-          description: invoice found
+          description: payment_intent found
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  invoice:
+                  payment_intent:
                     type: object
                     properties:
                       id:
@@ -74,7 +74,7 @@ paths:
                     - charge_amount
                     - last_decline_code
         '404':
-          description: invoice not found
+          description: payment_intent not found
 servers:
 - url: http://{defaultHost}
   variables:

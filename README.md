@@ -5,10 +5,6 @@ from the bank, the system should reduce the payment amount and retry (up to 4 ti
 payment is successful but for less than the full amount, the remaining balance should be
 automatically charged a week later
 
-## Glossary
-* PaymentIntent - object that represents intent to collect payment from a customer. 
-* Invoice - object that represents a payment request. Can have multiple PaymentIntents.
-
 ## Installation
 
 1. Install Ruby version 3.2.2

@@ -10,5 +10,5 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  resources :invoices, only: [ :create, :show ]
+  resources :payment_intents, only: [ :create, :show ]
 end

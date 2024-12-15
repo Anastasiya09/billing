@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :payment_intent do
     amount { 100 }
-    invoice
-    status { :success }
+    subscription_id { 1 }
   end
 end
