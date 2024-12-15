@@ -15,7 +15,7 @@ describe 'Invoces API' do
             charge_amount: { type: :number, format: :float },
             last_decline_code: { type: :string, nullable: true }
           },
-          required: ['id', 'amount', 'subscription_id', 'status', 'charge_amount', 'last_decline_code']
+          required: [ 'id', 'amount', 'subscription_id', 'status', 'charge_amount', 'last_decline_code' ]
         }
       }
     }
