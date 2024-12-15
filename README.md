@@ -1,24 +1,29 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The system for automatic subscription rebilling. If a payment attempt returns an "insufficient funds" response
+from the bank, the system should reduce the payment amount and retry (up to 4 times). If the
+payment is successful but for less than the full amount, the remaining balance should be
+automatically charged a week later
 
-Things you may want to cover:
+## Glossary
+* PaymentIntent - object that represents intent to collect payment from a customer. 
+* Invoice - object that represents a payment request. Can have multiple PaymentIntents.
 
-* Ruby version
+## Installation
 
-* System dependencies
+1. Install Ruby version 3.2.2
+2. `bundle install`
+3. `rails db:create`
+4. `rails db:migrate`
+5. `rails s`
+6. Open http://localhost:3000/
 
-* Configuration
+### Run tests
 
-* Database creation
+`rspec`
 
-* Database initialization
+## API Documentation
 
-* How to run the test suite
+Use swagger to see the API documentation. Open http://localhost:3000/api-docs/index.html.
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+`Try it out` button can be used to test the API.

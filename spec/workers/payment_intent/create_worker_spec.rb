@@ -50,7 +50,7 @@ RSpec.describe PaymentIntent::CreateWorker do
       end
     end
 
-    context 'when ExternalBilling returns failed result' do
+    context 'when ExternalPaymentProvider returns failed result' do
       let(:result) { { status: :failure, decline_code: :insufficient_funds, error_message: 'error message' } }
 
       it 'creates a payment intent' do
@@ -88,6 +88,26 @@ RSpec.describe PaymentIntent::CreateWorker do
         it 'calls worker for one rebill with persent of amount' do
           perform
           expect(described_class).to have_received(:perform_in).with(30.second, invoice.id, 75)
+        end
+      end
+
+      context 'when decline_code is not insufficient_funds' do
+        let(:result) { { status: :failure, decline_code: :card_not_supported, error_message: 'error message' } }
+
+        it 'creates a payment intent' do
+          expect { perform }.to change { PaymentIntent.count }.by(1)
+          expect(PaymentIntent.first).to have_attributes(
+            invoice: invoice,
+            amount: amount,
+            status: 'failure',
+            decline_code: 'card_not_supported',
+            error_message: 'error message'
+          )
+        end
+
+        it 'does not call worker' do
+          perform
+          expect(described_class).not_to have_received(:perform_in)
         end
       end
     end

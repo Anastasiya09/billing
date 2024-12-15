@@ -40,7 +40,7 @@ class PaymentIntent::CreateWorker
     if payment_intent.success?
       # automatically schedule an additional transaction one week later for the remaining balance.
       PaymentIntent::CreateWorker.perform_in(SUCCESS_REBILLING_DELAY, invoice.id, invoice.amount - invoice.charge_amount)
-    else
+    elsif payment_intent.decline_code == 'insufficient_funds'
       next_amount_charge = invoice.amount * percent / 100
       PaymentIntent::CreateWorker.perform_in(FAILURE_RETRY_DELAY, invoice.id, next_amount_charge) if next_amount_charge.positive?
     end
