@@ -222,7 +222,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.2.1)
-    rdoc (6.8.1)
+    rdoc (6.9.0)
       psych (>= 4.0.0)
     redis (5.3.0)
       redis-client (>= 0.22.0)
@@ -239,10 +239,10 @@ GEM
     rspec-mocks (3.13.2)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-rails (6.1.5)
-      actionpack (>= 6.1)
-      activesupport (>= 6.1)
-      railties (>= 6.1)
+    rspec-rails (7.1.0)
+      actionpack (>= 7.0)
+      activesupport (>= 7.0)
+      railties (>= 7.0)
       rspec-core (~> 3.13)
       rspec-expectations (~> 3.13)
       rspec-mocks (~> 3.13)
@@ -357,7 +357,7 @@ DEPENDENCIES
   kamal
   puma (>= 5.0)
   rails (~> 8.0.0, >= 8.0.0.1)
-  rspec-rails (~> 6.1.0)
+  rspec-rails (~> 7.1.0)
   rswag
   rubocop-rails-omakase
   shoulda-matchers (~> 6.0)
