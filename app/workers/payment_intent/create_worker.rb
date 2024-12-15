@@ -5,7 +5,7 @@ class PaymentIntent::CreateWorker
     { range: 8..11, percent: 50 },
     { range: 11..15, percent: 25 }
   ]
-  FAILURE_RETRY_DELAY = 10.seconds
+  FAILURE_RETRY_DELAY = 30.seconds
   SUCCESS_REBILLING_DELAY = 1.week
 
   include Sidekiq::Worker
@@ -15,7 +15,7 @@ class PaymentIntent::CreateWorker
     @invoice = Invoice.find(invoice_id)
     @amount = amount
 
-    result = ExternalBilling.new(amount).call # some data get from Invoice, like: currency, user_id, card_info, etc.
+    result = ExternalPaymentProvider.new(amount).call # some data get from Invoice, like: currency, user_id, card_info, etc.
     create_payment_intent(result)
     call_next_payment_intent_creation
   end
@@ -39,7 +39,7 @@ class PaymentIntent::CreateWorker
 
     if payment_intent.success?
       # automatically schedule an additional transaction one week later for the remaining balance.
-      PaymentIntent::CreateWorker.perform_in(SUCCESS_REBILLING_DELAY, invoice.id, invoice.amount - payment_intent.amount)
+      PaymentIntent::CreateWorker.perform_in(SUCCESS_REBILLING_DELAY, invoice.id, invoice.amount - invoice.charge_amount)
     else
       next_amount_charge = invoice.amount * percent / 100
       PaymentIntent::CreateWorker.perform_in(FAILURE_RETRY_DELAY, invoice.id, next_amount_charge) if next_amount_charge.positive?

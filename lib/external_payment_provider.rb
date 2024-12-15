@@ -1,4 +1,4 @@
-class ExternalBilling
+class ExternalPaymentProvider
   # data is any additional data related to payment
   def initialize(amount, data = {})
     @amount = amount

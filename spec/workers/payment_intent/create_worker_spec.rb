@@ -6,11 +6,11 @@ RSpec.describe PaymentIntent::CreateWorker do
 
     let(:invoice) { create(:invoice, amount: 100) }
     let(:amount) { 100 }
-    let(:external_billing_instance) { instance_double(ExternalBilling, call: result) }
+    let(:payment_provider_instance) { instance_double(ExternalPaymentProvider, call: result) }
     let(:result) { { status: :success } }
 
     before do
-      allow(ExternalBilling).to receive(:new).and_return(external_billing_instance)
+      allow(ExternalPaymentProvider).to receive(:new).and_return(payment_provider_instance)
       allow(described_class).to receive(:perform_in)
     end
 
